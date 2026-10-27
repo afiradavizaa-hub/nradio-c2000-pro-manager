@@ -1,0 +1,194 @@
+<UserControl x:Class="NRadioManager.Views.SystemView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" CornerRadius="8" Padding="12,8" Margin="0,0,0,12"
+                Visibility="{Binding HasMessage, Converter={StaticResource BoolToVisibility}}">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Setter Property="Background" Value="{DynamicResource B.AccentSoft}" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsError}" Value="True">
+                            <Setter Property="Background" Value="#3A1B1B" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+            <TextBlock Text="{Binding Message}" TextWrapping="Wrap" FontSize="12" />
+        </Border>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <Border Style="{StaticResource Card}" Background="#3A1B1B" BorderBrush="{DynamicResource B.Danger}"
+                        Visibility="{Binding HasAuthWarning, Converter={StaticResource BoolToVisibility}}">
+                    <StackPanel>
+                        <TextBlock Text="安全提示（实测结论）" Style="{StaticResource SectionTitle}" Foreground="{DynamicResource B.Danger}" />
+                        <TextBlock Text="{Binding AuthWarning}" Style="{StaticResource Note}" Foreground="{DynamicResource B.Text}" />
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource Card}">
+                    <StackPanel>
+                        <TextBlock Text="设备信息" Style="{StaticResource SectionTitle}" />
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="设备名称" Style="{StaticResource FieldLabel}" Margin="0,5,18,5" />
+                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding DeviceName}" Style="{StaticResource FieldValue}" Margin="0,5" />
+                            <TextBlock Grid.Row="0" Grid.Column="2" Text="序列号" Style="{StaticResource FieldLabel}" Margin="0,5,18,5" />
+                            <TextBlock Grid.Row="0" Grid.Column="3" Text="{Binding Serial}" Style="{StaticResource FieldValue}" Margin="0,5" />
+
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="硬件版本" Style="{StaticResource FieldLabel}" Margin="0,5,18,5" />
+                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Hardware}" Style="{StaticResource FieldValue}" Margin="0,5" />
+                            <TextBlock Grid.Row="1" Grid.Column="2" Text="固件版本" Style="{StaticResource FieldLabel}" Margin="0,5,18,5" />
+                            <TextBlock Grid.Row="1" Grid.Column="3" Style="{StaticResource FieldValue}" Margin="0,5">
+                                <Run Text="{Binding Firmware, Mode=OneWay}" />
+                                <Run Text=" （" /><Run Text="{Binding FirmwareDate, Mode=OneWay}" /><Run Text="）" />
+                            </TextBlock>
+
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="硬件 MAC" Style="{StaticResource FieldLabel}" Margin="0,5,18,5" />
+                            <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Mac}" Style="{StaticResource FieldValue}" Margin="0,5" />
+                            <TextBlock Grid.Row="2" Grid.Column="2" Text="双分区" Style="{StaticResource FieldLabel}" Margin="0,5,18,5" />
+                            <TextBlock Grid.Row="2" Grid.Column="3" Text="{Binding TwoPartition}" Style="{StaticResource FieldValue}" Margin="0,5" />
+
+                            <TextBlock Grid.Row="3" Grid.Column="0" Text="IMEI" Style="{StaticResource FieldLabel}" Margin="0,5,18,5" />
+                            <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Imei}" Style="{StaticResource FieldValue}" Margin="0,5" />
+                            <TextBlock Grid.Row="3" Grid.Column="2" Text="IMSI" Style="{StaticResource FieldLabel}" Margin="0,5,18,5" />
+                            <TextBlock Grid.Row="3" Grid.Column="3" Text="{Binding Imsi}" Style="{StaticResource FieldValue}" Margin="0,5" />
+
+                            <TextBlock Grid.Row="4" Grid.Column="0" Text="ICCID" Style="{StaticResource FieldLabel}" Margin="0,5,18,5" />
+                            <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding Iccid}" Style="{StaticResource FieldValue}" Margin="0,5" />
+                            <TextBlock Grid.Row="4" Grid.Column="2" Text="产品标识" Style="{StaticResource FieldLabel}" Margin="0,5,18,5" />
+                            <TextBlock Grid.Row="4" Grid.Column="3" Text="{Binding TpbVersion}" Style="{StaticResource FieldValue}" Margin="0,5" />
+
+                            <TextBlock Grid.Row="5" Grid.Column="0" Text="卡位数量" Style="{StaticResource FieldLabel}" Margin="0,5,18,5" />
+                            <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding TotalSimCount}" Style="{StaticResource FieldValue}" Margin="0,5" />
+                            <TextBlock Grid.Row="5" Grid.Column="2" Text="账号模式" Style="{StaticResource FieldLabel}" Margin="0,5,18,5" />
+                            <TextBlock Grid.Row="5" Grid.Column="3" Text="{Binding MultiAccount}" Style="{StaticResource FieldValue}" Margin="0,5" />
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource Card}">
+                    <StackPanel>
+                        <TextBlock Text="SIM / eSIM 卡位" Style="{StaticResource SectionTitle}" />
+                        <TextBlock Style="{StaticResource FieldValue}" Margin="0,0,0,10">
+                            <Run Text="切换模式：" /><Run Text="{Binding SimSwitchMode, Mode=OneWay}" />
+                        </TextBlock>
+                        <ItemsControl ItemsSource="{Binding Sims}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Style="{StaticResource RowBorder}">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="{Binding Name}" FontWeight="SemiBold" />
+                                                    <TextBlock Text="{Binding Type}" Style="{StaticResource Note}" Margin="8,0,0,0" />
+                                                    <Border Background="{DynamicResource B.AccentSoft}" CornerRadius="4" Padding="6,1" Margin="8,0,0,0"
+                                                            Visibility="{Binding IsActive, Converter={StaticResource BoolToVisibility}}">
+                                                        <TextBlock Text="使用中" FontSize="11" />
+                                                    </Border>
+                                                </StackPanel>
+                                                <TextBlock Style="{StaticResource Note}" Margin="0,4,0,0">
+                                                    <Run Text="ICCID " /><Run Text="{Binding Iccid, Mode=OneWay}" />
+                                                    <Run Text=" · IMSI " /><Run Text="{Binding Imsi, Mode=OneWay}" />
+                                                </TextBlock>
+                                            </StackPanel>
+                                            <Button Grid.Column="1" Content="切换到此卡位" Style="{StaticResource GhostButton}"
+                                                    VerticalAlignment="Center"
+                                                    Command="{Binding DataContext.SwitchSimCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding}" />
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <TextBlock Text="{Binding SimNote}" Style="{StaticResource Note}" Margin="0,10,0,0" />
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource Card}">
+                    <StackPanel>
+                        <TextBlock Text="管理员账号" Style="{StaticResource SectionTitle}" />
+                        <ItemsControl ItemsSource="{Binding Users}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Style="{StaticResource RowBorder}">
+                                        <TextBlock>
+                                            <Run Text="{Binding Username, Mode=OneWay}" />
+                                            <Run Text=" · 权限 " Foreground="{DynamicResource B.TextMuted}" />
+                                            <Run Text="{Binding Authority, Mode=OneWay}" />
+                                        </TextBlock>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <Grid Margin="0,12,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="170" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="170" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="170" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="当前密码" Style="{StaticResource FieldLabel}" Margin="0,0,10,0" />
+                            <PasswordBox Grid.Column="1" PasswordChanged="OnOldPasswordChanged" />
+                            <TextBlock Grid.Column="2" Text="新密码" Style="{StaticResource FieldLabel}" Margin="18,0,10,0" />
+                            <PasswordBox Grid.Column="3" PasswordChanged="OnNewPasswordChanged" />
+                            <TextBlock Grid.Column="4" Text="确认新密码" Style="{StaticResource FieldLabel}" Margin="18,0,10,0" />
+                            <PasswordBox Grid.Column="5" PasswordChanged="OnConfirmPasswordChanged" />
+                        </Grid>
+                        <Button Content="修改管理员密码" Style="{StaticResource PrimaryButton}" Margin="0,14,0,0"
+                                HorizontalAlignment="Left" Command="{Binding ChangePasswordCommand}" />
+                        <TextBlock Text="{Binding AccountNote}" Style="{StaticResource Note}" Margin="0,10,0,0" />
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource Card}">
+                    <StackPanel>
+                        <TextBlock Text="维护操作" Style="{StaticResource SectionTitle}" />
+                        <StackPanel Orientation="Horizontal">
+                            <Button Content="重启路由器" Style="{StaticResource GhostButton}" Margin="0,0,10,0"
+                                    Command="{Binding RestartCommand}" />
+                            <Button Content="恢复出厂设置" Style="{StaticResource DangerButton}"
+                                    Command="{Binding RestoreFactoryCommand}" />
+                        </StackPanel>
+                        <TextBlock Style="{StaticResource Note}" Margin="0,12,0,0"
+                                   Text="两项操作都会中断当前网络，软件会先弹出二次确认。" />
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource Card}">
+                    <StackPanel>
+                        <TextBlock Text="固件升级（未实现）" Style="{StaticResource SectionTitle}" />
+                        <TextBlock Text="{Binding FirmwareNote}" Style="{StaticResource Note}" />
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

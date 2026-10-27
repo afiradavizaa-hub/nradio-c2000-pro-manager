@@ -1,0 +1,159 @@
+<UserControl x:Class="NRadioManager.Views.C2000LockView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+            <Border Style="{StaticResource Card}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel>
+                        <TextBlock Text="当前锁定状态" Style="{StaticResource SectionTitle}" />
+                        <TextBlock Text="{Binding LockMode}" Style="{StaticResource FieldValue}" />
+                        <TextBlock Style="{StaticResource Note}" Margin="0,6,0,0">
+                            <Run Text="NCI/ECI " /><Run Text="{Binding CurrentCell, Mode=OneWay}" />
+                            <Run Text=" · TAC " /><Run Text="{Binding Tac, Mode=OneWay}" />
+                        </TextBlock>
+                    </StackPanel>
+                    <Button Grid.Column="1" Content="刷新" Style="{StaticResource GhostButton}"
+                            Command="{Binding RefreshCommand}" VerticalAlignment="Top" />
+                </Grid>
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
+                    <TextBlock Text="当前服务小区" Style="{StaticResource SectionTitle}" />
+                    <TextBlock Style="{StaticResource FieldValue}">
+                        <Run Text="Band " /><Run Text="{Binding Band, Mode=OneWay}" />
+                        <Run Text=" · PCI " /><Run Text="{Binding Pci, Mode=OneWay}" />
+                        <Run Text=" · EARFCN " /><Run Text="{Binding Earfcn, Mode=OneWay}" />
+                        <Run Text=" · 带宽 " /><Run Text="{Binding Bandwidth, Mode=OneWay}" />
+                    </TextBlock>
+                    <TextBlock Style="{StaticResource FieldValue}" Margin="0,8,0,0">
+                        <Run Text="RSRP " /><Run Text="{Binding Rsrp, Mode=OneWay}" />
+                        <Run Text=" · RSRQ " /><Run Text="{Binding Rsrq, Mode=OneWay}" />
+                        <Run Text=" · SINR " /><Run Text="{Binding Sinr, Mode=OneWay}" />
+                        <Run Text=" · CQI " /><Run Text="{Binding Cqi, Mode=OneWay}" />
+                    </TextBlock>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
+                    <TextBlock Text="实时建议" Style="{StaticResource ListHeader}" />
+                    <TextBlock Text="{Binding RecommendationTitle}" FontSize="16" FontWeight="SemiBold"
+                               Foreground="{DynamicResource B.Success}" />
+                    <TextBlock Text="{Binding RecommendationReason}" Style="{StaticResource FieldValue}" Margin="0,7,0,0" />
+                    <TextBlock Text="{Binding RecommendationDisclaimer}" Style="{StaticResource Note}" Margin="0,7,0,0" />
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
+                    <TextBlock Text="邻区与当前小区比较" Style="{StaticResource SectionTitle}" />
+                    <ItemsControl ItemsSource="{Binding Cells}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="2" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Margin="0,0,10,10" Padding="12" CornerRadius="{DynamicResource R.Small}">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="Background" Value="{DynamicResource B.SurfaceAlt}" />
+                                            <Setter Property="BorderBrush" Value="{DynamicResource B.BorderSoft}" />
+                                            <Setter Property="BorderThickness" Value="1" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Recommended}" Value="True">
+                                                    <Setter Property="BorderBrush" Value="{DynamicResource B.Success}" />
+                                                    <Setter Property="BorderThickness" Value="2" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Current}" Value="True">
+                                                    <Setter Property="Background" Value="{DynamicResource B.AccentSoft}" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <StackPanel>
+                                        <Grid>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding BandText}" FontSize="16" FontWeight="SemiBold" />
+                                                <TextBlock Text=" · PCI " Style="{StaticResource FieldValue}" VerticalAlignment="Bottom" />
+                                                <TextBlock Text="{Binding Pci}" Style="{StaticResource FieldValue}" VerticalAlignment="Bottom" />
+                                            </StackPanel>
+                                            <Border HorizontalAlignment="Right" CornerRadius="9" Padding="7,2">
+                                                <Border.Style>
+                                                    <Style TargetType="Border">
+                                                        <Setter Property="Background" Value="{DynamicResource B.Surface}" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Quality}" Value="优秀">
+                                                                <Setter Property="Background" Value="#3322C55E" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Quality}" Value="良好">
+                                                                <Setter Property="Background" Value="#333B82F6" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Quality}" Value="一般">
+                                                                <Setter Property="Background" Value="#33F59E0B" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Quality}" Value="较差">
+                                                                <Setter Property="Background" Value="#33EF4444" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Border.Style>
+                                                <TextBlock Text="{Binding Quality}" FontSize="11" FontWeight="SemiBold" />
+                                            </Border>
+                                        </Grid>
+                                        <ProgressBar Value="{Binding SignalPercent, Mode=OneWay}" Maximum="100" Margin="0,9,0,7" />
+                                        <Grid Margin="0,2">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel Grid.Column="0">
+                                                <TextBlock Text="RSRP" Style="{StaticResource FieldLabel}" />
+                                                <TextBlock Text="{Binding SignalText}" FontWeight="SemiBold" />
+                                            </StackPanel>
+                                            <StackPanel Grid.Column="1">
+                                                <TextBlock Text="RSRQ / SINR" Style="{StaticResource FieldLabel}" />
+                                                <TextBlock Text="{Binding RsrqText}" FontWeight="SemiBold" />
+                                                <TextBlock Text="{Binding SinrText}" Style="{StaticResource Note}" />
+                                            </StackPanel>
+                                            <StackPanel Grid.Column="2">
+                                                <TextBlock Text="EARFCN" Style="{StaticResource FieldLabel}" />
+                                                <TextBlock Text="{Binding Earfcn}" FontWeight="SemiBold" />
+                                            </StackPanel>
+                                        </Grid>
+                                        <Grid Margin="0,7,0,0">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="服务中" Foreground="{DynamicResource B.Success}" FontSize="11"
+                                                           Visibility="{Binding Current, Converter={StaticResource BoolToVisibility}}" />
+                                                <TextBlock Text=" · 推荐" Foreground="{DynamicResource B.Success}" FontSize="11"
+                                                           Visibility="{Binding Recommended, Converter={StaticResource BoolToVisibility}}" />
+                                                <TextBlock Text=" · 已锁定" Foreground="{DynamicResource B.Warn}" FontSize="11"
+                                                           Visibility="{Binding Locked, Converter={StaticResource BoolToVisibility}}" />
+                                            </StackPanel>
+                                            <Button Content="锁定/解锁" Style="{StaticResource GhostButton}" Padding="8,3"
+                                                    HorizontalAlignment="Right"
+                                                    Command="{Binding DataContext.ToggleCellLockCommand,
+                                                        RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding}" />
+                                        </Grid>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <TextBlock Text="{Binding OperationText}" Style="{StaticResource FieldValue}" Margin="0,10,0,0"
+                               TextWrapping="Wrap" />
+                    <TextBlock Text="{Binding Warning}" Style="{StaticResource Note}" Margin="0,12,0,0" TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

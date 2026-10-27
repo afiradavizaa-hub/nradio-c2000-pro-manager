@@ -1,0 +1,61 @@
+<UserControl x:Class="NRadioManager.Views.C2000MaintenanceView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+            <Border Style="{StaticResource Card}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel>
+                        <TextBlock Text="设备信息" Style="{StaticResource SectionTitle}" />
+                        <TextBlock Style="{StaticResource FieldValue}">
+                            <Run Text="{Binding Model, Mode=OneWay}" />
+                            <Run Text=" · 固件 " /><Run Text="{Binding Firmware, Mode=OneWay}" />
+                        </TextBlock>
+                        <TextBlock Style="{StaticResource Note}" Margin="0,6,0,0">
+                            <Run Text="硬件 " /><Run Text="{Binding Hardware, Mode=OneWay}" />
+                            <Run Text=" · 主板 " /><Run Text="{Binding Board, Mode=OneWay}" />
+                            <Run Text=" · MAC " /><Run Text="{Binding MacAddress, Mode=OneWay}" />
+                        </TextBlock>
+                    </StackPanel>
+                    <Button Grid.Column="1" Content="刷新" Style="{StaticResource GhostButton}"
+                            Command="{Binding RefreshCommand}" VerticalAlignment="Top" />
+                </Grid>
+            </Border>
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
+                    <TextBlock Text="运行状态" Style="{StaticResource SectionTitle}" />
+                    <TextBlock Style="{StaticResource FieldValue}">
+                        <Run Text="CPU " /><Run Text="{Binding CpuText, Mode=OneWay}" />
+                        <Run Text=" · 内存 " /><Run Text="{Binding MemoryText, Mode=OneWay}" />
+                        <Run Text=" · 温度 " /><Run Text="{Binding TemperatureText, Mode=OneWay}" />
+                    </TextBlock>
+                    <TextBlock Style="{StaticResource FieldValue}" Margin="0,8,0,0">
+                        <Run Text="运行时间 " /><Run Text="{Binding UptimeText, Mode=OneWay}" />
+                    </TextBlock>
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
+                    <TextBlock Text="本机网络质量检测" Style="{StaticResource SectionTitle}" />
+                    <TextBlock Text="{Binding DiagnosisText}" Style="{StaticResource FieldValue}" TextWrapping="Wrap" />
+                    <Button Content="检测路由器与外网" Style="{StaticResource PrimaryButton}"
+                            Command="{Binding DiagnoseCommand}" HorizontalAlignment="Left" Margin="0,12,0,0" />
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
+                    <TextBlock Text="高风险维护" Style="{StaticResource SectionTitle}" />
+                    <TextBlock Text="{Binding WriteNote}" Style="{StaticResource Note}" TextWrapping="Wrap" />
+                    <Button Content="重启设备（二次确认）" Style="{StaticResource PrimaryButton}" Margin="0,12,0,0"
+                            HorizontalAlignment="Left" Command="{Binding RebootCommand}" />
+                    <TextBlock Text="{Binding OperationText}" Style="{StaticResource FieldValue}" Margin="0,10,0,0"
+                               TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

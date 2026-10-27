@@ -1,0 +1,197 @@
+<UserControl x:Class="NRadioManager.Views.WifiView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" CornerRadius="8" Padding="12,8" Margin="0,0,0,12"
+                Visibility="{Binding HasMessage, Converter={StaticResource BoolToVisibility}}">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Setter Property="Background" Value="{DynamicResource B.AccentSoft}" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsError}" Value="True">
+                            <Setter Property="Background" Value="#3A1B1B" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+            <TextBlock Text="{Binding Message}" TextWrapping="Wrap" FontSize="12" />
+        </Border>
+
+        <TabControl Grid.Row="1">
+            <TabItem Header="基础设置">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,12,0,0">
+                    <StackPanel>
+                        <Border Style="{StaticResource Card}">
+                            <StackPanel>
+                                <TextBlock Text="热点开关" Style="{StaticResource SectionTitle}" />
+                                <CheckBox Content="启用 Wi-Fi 热点" IsChecked="{Binding WlanEnable}" />
+                                <TextBlock Style="{StaticResource Note}" Margin="0,8,0,0"
+                                           Text="关闭热点会立即中断无线连接：如果本机正是通过此热点连接的，将失去与设备的通信。" />
+                                <Button Content="应用开关状态" Style="{StaticResource PrimaryButton}" Margin="0,14,0,0"
+                                        HorizontalAlignment="Left" Command="{Binding ToggleWifiCommand}" />
+                            </StackPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource Card}">
+                            <StackPanel>
+                                <TextBlock Text="无线参数" Style="{StaticResource SectionTitle}" />
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="180" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="140" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="90" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="协议模式" Style="{StaticResource FieldLabel}" Margin="0,0,10,0" />
+                                    <ComboBox Grid.Column="1" ItemsSource="{Binding NetModeOptions}" DisplayMemberPath="Text"
+                                              SelectedItem="{Binding SelectedNetMode}" />
+                                    <TextBlock Grid.Column="2" Text="主信道" Style="{StaticResource FieldLabel}" Margin="18,0,10,0" />
+                                    <ComboBox Grid.Column="3" ItemsSource="{Binding ChannelOptions}" DisplayMemberPath="Text"
+                                              SelectedItem="{Binding SelectedChannel}" />
+                                    <TextBlock Grid.Column="4" Text="最大终端数" Style="{StaticResource FieldLabel}" Margin="18,0,10,0" />
+                                    <TextBox Grid.Column="5" Text="{Binding MaxClientsText}" />
+                                </Grid>
+                                <CheckBox Content="启用 AP 隔离（终端之间不能互相访问）" IsChecked="{Binding ApIsolate}" Margin="0,14,0,0" />
+                                <TextBlock Text="{Binding BandwidthNote}" Style="{StaticResource Note}" Margin="0,12,0,0" />
+                                <Button Content="保存无线参数" Style="{StaticResource PrimaryButton}" Margin="0,14,0,0"
+                                        HorizontalAlignment="Left" Command="{Binding SaveBasicCommand}" />
+                            </StackPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource Card}">
+                            <StackPanel>
+                                <TextBlock Text="自动关闭热点（休眠）" Style="{StaticResource SectionTitle}" />
+                                <CheckBox Content="启用自动关闭" IsChecked="{Binding SleepEnabled}" />
+                                <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                                    <TextBlock Text="无连接后自动关闭（分钟）" Style="{StaticResource FieldLabel}" Margin="0,0,10,0" />
+                                    <TextBox Text="{Binding SleepMinutesText}" Width="90" />
+                                </StackPanel>
+                                <Button Content="保存休眠设置" Style="{StaticResource PrimaryButton}" Margin="0,14,0,0"
+                                        HorizontalAlignment="Left" Command="{Binding SaveSleepCommand}" />
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <TabItem Header="安全设置">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,12,0,0">
+                    <StackPanel>
+                        <Border Style="{StaticResource Card}">
+                            <StackPanel>
+                                <TextBlock Text="名称与密码" Style="{StaticResource SectionTitle}" />
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Wi-Fi 名称 (SSID)" Style="{StaticResource FieldLabel}" Margin="0,6,12,6" />
+                                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Ssid}" Margin="0,4,18,4" />
+                                    <TextBlock Grid.Row="0" Grid.Column="2" Text="安全模式" Style="{StaticResource FieldLabel}" Margin="0,6,12,6" />
+                                    <ComboBox Grid.Row="0" Grid.Column="3" ItemsSource="{Binding SecurityModeOptions}"
+                                              DisplayMemberPath="Text" SelectedItem="{Binding SelectedSecurityMode}" Margin="0,4" />
+
+                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="密码" Style="{StaticResource FieldLabel}" Margin="0,6,12,6" />
+                                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Password}" Margin="0,4,18,4" />
+                                    <CheckBox Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Content="隐藏 SSID（不广播）"
+                                              IsChecked="{Binding BroadcastSsid, Converter={StaticResource InvertBool}}" VerticalAlignment="Center" />
+                                </Grid>
+                                <Button Content="保存无线安全设置" Style="{StaticResource PrimaryButton}" Margin="0,14,0,0"
+                                        HorizontalAlignment="Left" Command="{Binding SaveSecurityCommand}" />
+                                <TextBlock Style="{StaticResource Note}" Margin="0,10,0,0"
+                                           Text="保存后所有无线终端会断开，需要用新名称和密码重新连接。WPA/WPA2 密码长度要求 8–32 位。" />
+                            </StackPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource Card}">
+                            <StackPanel>
+                                <TextBlock Text="当前生效值（设备读取）" Style="{StaticResource SectionTitle}" />
+                                <TextBlock Style="{StaticResource FieldValue}">
+                                    <Run Text="安全模式：" />
+                                    <Run Text="{Binding CurrentSecurityMode, Mode=OneWay}" />
+                                </TextBlock>
+                                <TextBlock Style="{StaticResource FieldValue}" Margin="0,8,0,0">
+                                    <Run Text="设备内保存的密码：" />
+                                    <Run Text="{Binding CurrentKeyMasked, Mode=OneWay}" />
+                                </TextBlock>
+                                <TextBlock Style="{StaticResource FieldValue}" Margin="0,8,0,0">
+                                    <Run Text="加密算法：" />
+                                    <Run Text="{Binding EncryptionMode, Mode=OneWay}" />
+                                    <Run Text=" · 信道范围：" />
+                                    <Run Text="{Binding FirstChannel, Mode=OneWay}" />
+                                    <Run Text="-" />
+                                    <Run Text="{Binding LastChannel, Mode=OneWay}" />
+                                </TextBlock>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <TabItem Header="只读诊断">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,12,0,0">
+                    <StackPanel>
+                        <Border Style="{StaticResource Card}">
+                            <StackPanel>
+                                <TextBlock Text="软件参数（只读）" Style="{StaticResource SectionTitle}" />
+                                <TextBlock Style="{StaticResource FieldValue}">
+                                    <Run Text="带宽 bandwidth=" /><Run Text="{Binding Bandwidth, Mode=OneWay}" />
+                                    <Run Text=" · bandwidth_acs=" /><Run Text="{Binding BandwidthAcs, Mode=OneWay}" />
+                                    <Run Text=" · only_20m=" /><Run Text="{Binding Only20M, Mode=OneWay}" />
+                                    <Run Text=" · 双频支持=" /><Run Text="{Binding DualBandSupport, Mode=OneWay}" />
+                                </TextBlock>
+                                <TextBlock Style="{StaticResource FieldValue}" Margin="0,8,0,0">
+                                    <Run Text="Beacon 周期=" /><Run Text="{Binding BeaconPeriod, Mode=OneWay}" />
+                                    <Run Text=" · DTIM=" /><Run Text="{Binding DtimInterval, Mode=OneWay}" />
+                                    <Run Text=" · 出厂最大客户端数=" /><Run Text="{Binding InitialMaxClients, Mode=OneWay}" />
+                                </TextBlock>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource Card}">
+                            <StackPanel>
+                                <TextBlock Text="MAC 地址过滤" Style="{StaticResource SectionTitle}" />
+                                <TextBlock Style="{StaticResource FieldValue}">
+                                    <Run Text="状态：" /><Run Text="{Binding MacFilterState, Mode=OneWay}" />
+                                    <Run Text=" · 模式：" /><Run Text="{Binding MacFilterMode, Mode=OneWay}" />
+                                </TextBlock>
+                                <TextBlock Style="{StaticResource FieldValue}" Margin="0,8,0,0">
+                                    <Run Text="白名单：" />
+                                </TextBlock>
+                                <TextBlock Text="{Binding MacAllowText}" Style="{StaticResource Note}" />
+                                <TextBlock Style="{StaticResource FieldValue}" Margin="0,8,0,0">
+                                    <Run Text="黑名单：" />
+                                </TextBlock>
+                                <TextBlock Text="{Binding MacDenyText}" Style="{StaticResource Note}" />
+                                <TextBlock Text="{Binding MacFilterNote}" Style="{StaticResource Note}" Margin="0,12,0,0" />
+                            </StackPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource Card}">
+                            <StackPanel>
+                                <TextBlock Text="WPS" Style="{StaticResource SectionTitle}" />
+                                <TextBlock Style="{StaticResource FieldValue}">
+                                    <Run Text="状态：" /><Run Text="{Binding WpsState, Mode=OneWay}" />
+                                </TextBlock>
+                                <TextBlock Text="{Binding WpsNote}" Style="{StaticResource Note}" Margin="0,12,0,0" />
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>
