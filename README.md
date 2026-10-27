@@ -137,4 +137,5 @@ dotnet run --project src\NRadioManager\NRadioManager.csproj -c Release -- --ui-s
 
 - [C2000 Pro 审计与能力矩阵](docs/08-C2000Pro审计与能力矩阵.md)
 - [C2000 Pro 适配架构与真机验证](docs/09-C2000Pro适配架构与验证.md)
+- [v4.3.1 接入终端名称乱码修复](docs/14-v4.3.1-终端名称乱码修复.md)
 - [历史 NRadio 接口分析](docs/01-原厂接口逆向分析.md)

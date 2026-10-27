@@ -1217,6 +1217,7 @@ internal sealed class C2000CompatibilityApi : IDeviceApi
                 Index = "",
                 Mac = item.Mac ?? "",
                 NameRaw = item.Hostname ?? "",
+                NameText = item.Hostname ?? "",
                 Status = item.Switch == 0 ? "2" : item.Exist == 1 ? "1" : "0",
                 ConnType = item.Type == "wireless" ? "WIFI" : item.Type ?? "",
                 Ip = item.IpAddress ?? "",

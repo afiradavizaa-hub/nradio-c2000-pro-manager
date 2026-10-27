@@ -346,6 +346,7 @@ public sealed class ClientEntry
     [JsonPropertyName("i")] public string? Index { get; set; }
     [JsonPropertyName("m")] public string? Mac { get; set; }
     [JsonPropertyName("n")] public string? NameRaw { get; set; }
+    [JsonIgnore] public string? NameText { get; set; }
     [JsonPropertyName("nt")] public string? NameType { get; set; }
     [JsonPropertyName("s")] public string? Status { get; set; }   // 1 正常 / 2 已拉黑
     [JsonPropertyName("ct")] public string? ConnType { get; set; }
@@ -359,7 +360,7 @@ public sealed class ClientEntry
     [JsonPropertyName("rx3")] public string? Rx3Day { get; set; }
     [JsonPropertyName("tx3")] public string? Tx3Day { get; set; }
     [JsonPropertyName("rssi")] public string? Rssi { get; set; }
-    [JsonIgnore] public string Name => HexText.DecodeName(NameRaw);
+    [JsonIgnore] public string Name => NameText ?? HexText.DecodeName(NameRaw);
 }
 
 public sealed class DeviceManagementInfo

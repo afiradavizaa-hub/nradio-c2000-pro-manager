@@ -5,7 +5,7 @@
 - 源码：`src/NRadioManager`
 - 测试：`tests/NRadioManager.SelfTest`
 - 构建产物：`dist/NRadioManager.exe`
-- 当前版本：`4.3.0`
+- 当前版本：`4.3.1`
 - 产品标识：`NRadio C2000 Pro 高级管理器`
 - 编译框架：`.NET 10 / WPF / Windows x64`
 

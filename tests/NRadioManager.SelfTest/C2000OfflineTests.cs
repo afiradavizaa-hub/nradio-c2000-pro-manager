@@ -93,6 +93,24 @@ internal static class C2000OfflineTests
             return false;
         }
         Console.WriteLine("PASS  离线映射：运行时、蜂窝、身份与终端字段");
+
+        var devices = await adapter.Api.GetDevicesAsync(default);
+        var terminalName = devices.ClientList?.SingleOrDefault()?.Name;
+        if (terminalName != "OfflineClient-客厅")
+        {
+            Console.WriteLine($"FAIL  离线终端：C2000 UTF-8 设备名解码错误（{terminalName ?? "null"}）");
+            return false;
+        }
+        Console.WriteLine("PASS  离线终端：C2000 UTF-8 设备名未被误按十六进制解码");
+
+        var legacyName = new ClientEntry { NameRaw = "4f6e65506c75732d3135" }.Name;
+        if (legacyName != "OnePlus-15")
+        {
+            Console.WriteLine($"FAIL  兼容终端：旧 NRadio HEX 设备名解码回归（{legacyName}）");
+            return false;
+        }
+        Console.WriteLine("PASS  兼容终端：旧 NRadio HEX 设备名解码保持不变");
+
         var usage = await adapter.GetDataUsageAsync();
         if (usage.Sims.Count != 2 || Math.Abs(usage.Sims[0].MonthlyUsedGb - 48.77147) > 0.001 ||
             Math.Abs(usage.Sims[0].TotalUsedGb - 254.24404) > 0.001)
@@ -274,7 +292,7 @@ internal static class C2000OfflineTests
 
         private const string RuntimeJson = """
         {"result":{"global":{"wifi_temp":42,"cpu_percent":7,"mem_percent":58,"uptime":100,"net_type":"Cellular"},
-        "terminal_all":{"count":1,"client":{"00:11:22:33:44:55":{"txbytes":"2048","rxbytes":"1024","hostname":"OfflineClient","ipaddr":"192.168.66.2","mac":"00:11:22:33:44:55","type":"wireless","exsit":1}}},
+        "terminal_all":{"count":1,"client":{"00:11:22:33:44:55":{"txbytes":"2048","rxbytes":"1024","hostname":"OfflineClient-客厅","ipaddr":"192.168.66.2","mac":"00:11:22:33:44:55","type":"wireless","exsit":1}}},
         "lans":[{"proto":"static","status":0,"ipaddrs":[{"ipaddr":"192.168.66.1/24","netmask":"255.255.255.0"}]}],
         "cpe":[{"name":"wan0","model":"RG200U-CN","status":0,"mode":"NR SA","band":"41","pci":"887","earfcn":"504990","rsrp":"-79","rsrq":"-6","sinr":"15","simcount":2,"simno":"1","isp":"China Mobile","V4":{"ipaddrs":["10.0.0.2"],"dns":["1.1.1.1"]}}],
         "bat":{"charging":0,"percent":-1},"wlan":{"radio":[{"ifname":"wlan1","ssid":"offline-test","channel":"149","frequency":"5.745"}]}}}

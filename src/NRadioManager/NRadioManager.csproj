@@ -13,7 +13,7 @@
     <ApplicationIcon>app.ico</ApplicationIcon>
     <Product>NRadio C2000 Pro 高级管理器</Product>
     <Description>NRadio C2000 Pro 真机接口高级管理器</Description>
-    <Version>4.3.0</Version>
+    <Version>4.3.1</Version>
     <!-- 本项目刻意不引入任何第三方 NuGet 依赖：图表、主题、MVVM 基础设施均为自研，
          以保证离线可编译、体积可控、运行环境无额外要求。 -->
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
